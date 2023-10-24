@@ -10,6 +10,19 @@ export const getAllCategory = async (req, res, next) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error })
     }
+}
+
+export const getCategory = async (req, res) => {
+    try {
+        const category = await Category.findById(req.params.categoryId);
+
+        if (category) {
+            res.status(201).json({ success: true, category })
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: error })
+    }
 
 }
 
@@ -21,13 +34,32 @@ export const addCategory = async (req, res, next) => {
             icon: req.body.icon,
             color: req.body.color
         });
-
         await category.save().then((category) => {
             res.status(201).json({ success: true, message: "A category has been created" });
         })
 
     } catch (error) {
         res.status(500).json({ success: false, error: error.message, message: "The category can not be created" });
+    }
+}
+
+
+
+export const updateCategory = async (req, res, next) => {
+    try {
+        const categoryId = req.params.categoryId;
+
+        const category = await Category.findByIdAndUpdate(categoryId, {
+            name: req.body.name,
+            icon: req.body.icon,
+            color: req.body.color
+        });
+        if (category) {
+            res.status(201).json({ success: true, message: "A category has been update" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message, message: "The category can not be updated" });
     }
 }
 
