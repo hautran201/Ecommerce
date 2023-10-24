@@ -76,7 +76,7 @@ export const updateProduct = async (req, res) => {
 
         res.status(201).json({ success: true, message: 'Product updated successfully' })
     } catch (error) {
-        res.status(500).json({ success: false, error: "Product don't exist" })
+        res.status(500).json({ success: false, error: "Product not found" })
     }
 
 }
