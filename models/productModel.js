@@ -9,7 +9,7 @@ const ProductSchema = new mongoose.Schema({
     images: [{ type: String }],
     brand: { type: String, default: "" },
     price: { type: Number, default: 0 },
-    category: {
+    categoryId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
         required: true
@@ -23,6 +23,9 @@ const ProductSchema = new mongoose.Schema({
     rating: {
         type: Number,
         default: false
+    },
+    numReviews: {
+        type: Number
     },
     isFeatured: {
         type: Number,
