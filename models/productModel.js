@@ -24,8 +24,11 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         default: false
     },
+    numReviews: {
+        type: Number
+    },
     isFeatured: {
-        type: Number,
+        type: Boolean,
         default: 0
     }
 }, { timestamps: true })
