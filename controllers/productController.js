@@ -119,7 +119,7 @@ export const updateProduct = async (req, res) => {
             rating: req.body.rating,
             isFeatured: req.body.isFeatured,
         })
-
+        
         res.status(201).json({
             success: true,
             message: 'Product updated successfully',
