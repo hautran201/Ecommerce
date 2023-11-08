@@ -1,8 +1,10 @@
 import { expressjwt as jwt } from 'express-jwt'
 
 const isRevoked = async (req, payload, done) => {
-    if (payload.isAdmin) {
+    if (!payload.isAdmin) {
+        done(null, true)
     }
+    done()
 }
 
 const authJwt = () => {

@@ -1,9 +1,7 @@
-import express from "express";
-const router = express.Router();
+import express from 'express'
+import { getCountUser } from '../controllers/userController.js'
+const router = express.Router()
 
-router.get("/", (req, res) => {
-    return res.send("Access");
-})
+router.get('/get/count', getCountUser)
 
-
-export default router;
+export default router
