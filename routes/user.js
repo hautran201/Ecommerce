@@ -1,7 +1,7 @@
-import express from 'express'
-import { getCountUser } from '../controllers/userController.js'
-const router = express.Router()
+import express from 'express';
+import { getCountUser } from '../controllers/userController.js';
+const router = express.Router();
 
-router.get('/get/count', getCountUser)
+router.get('/get/count', getCountUser);
 
-export default router
+export default router;

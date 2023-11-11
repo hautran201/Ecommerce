@@ -1,19 +1,19 @@
-import { expressjwt as jwt } from 'express-jwt'
+import { expressjwt as jwt } from 'express-jwt';
 
-const isRevoked = async (req, payload, done) => {
-    if (!payload.isAdmin) {
-        done(null, true)
-    }
-    done()
-}
+// const isRevoked = async (req, payload, done) => {
+//     if (!payload.isAdmin) {
+//         done(null, true)
+//     }
+//     done()
+// }
 
 const authJwt = () => {
-    const api = process.env.API_URL
+    const api = process.env.API_URL;
 
     return jwt({
         secret: process.env.SECRET_KEY,
         algorithms: ['HS256'],
-        isRevoked: isRevoked,
+        // isRevoked: isRevoked,
     }).unless({
         path: [
             { url: /\/api\/v1\/products\/(.*)/, methods: ['GET', 'OPTIONS'] },
@@ -21,7 +21,7 @@ const authJwt = () => {
             `${api}/auth/login`,
             `${api}/auth/register`,
         ],
-    })
-}
+    });
+};
 
-export default authJwt
+export default authJwt;
