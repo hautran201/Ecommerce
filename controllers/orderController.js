@@ -15,6 +15,52 @@ export const getAllOrder = async (req, res) => {
     }
 };
 
+export const getCountOrders = async (req, res) => {
+    try {
+        const orderCount = await Order.countDocuments();
+        if (!orderCount) {
+            return res
+                .status(400)
+                .json({ message: 'There are not enough orders' });
+        }
+        res.status(200).json(orderCount);
+    } catch (error) {
+        res.status(500).json('The order ');
+    }
+};
+
+export const getTotalSales = async (req, res) => {
+    try {
+        const totalSales = await Order.aggregate([
+            { $group: { _id: null, totalsales: { $sum: '$totalPrice' } } },
+        ]);
+
+        if (!totalSales) {
+            return res.status(400).json('The order sale cannot be ganerated');
+        }
+
+        res.send({ totalSales: totalSales.pop().totalsales });
+    } catch (error) {
+        res.status(500).json({ message: '', error });
+    }
+};
+
+export const getUserOrder = async (req, res) => {
+    try {
+        let userOrder = await Order.find({ user: req.params.userId }).populate({
+            path: 'orderItems',
+            populate: {
+                path: 'product',
+                populate: 'category',
+            },
+        });
+
+        res.status(200).json({ userOrder: userOrder });
+    } catch (error) {
+        res.status(500).json({ message: '', error });
+    }
+};
+
 export const getOrder = async (req, res) => {
     try {
         const orderList = await Order.findById(req.params.id)
@@ -52,7 +98,7 @@ export const addOrder = async (req, res) => {
             return res.status(401).json('Khong co san pham');
         }
 
-        let orderPrices = Promise.all(
+        let orderPrices = await Promise.all(
             orderItemsIdsResovle.map(async (orderItemId) => {
                 const orderItem = await OrderItem.findById(
                     orderItemId
@@ -62,8 +108,7 @@ export const addOrder = async (req, res) => {
             })
         );
 
-        // orderPrices = await orderPrices;
-        const totalPrice = (await orderPrices).reduce(
+        const totalPrice = orderPrices.reduce(
             (result, value) => result + value
         );
 

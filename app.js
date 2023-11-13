@@ -29,10 +29,6 @@ app.use(errorHandle);
 //Connect mongodb
 dbConnection();
 
-app.get('/', (req, res) => {
-    res.send('Hello  World!');
-});
-
 //Routes
 Routes(app);
 
