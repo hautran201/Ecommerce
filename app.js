@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import path from 'path';
 import 'dotenv/config';
 
 export const app = express();
@@ -25,6 +26,10 @@ app.use(morgan('combined')); //theo dõi log GET, POST...
 
 app.use(authJwt()); //Authorized
 app.use(errorHandle);
+
+//Public route
+const __dirname = path.resolve();
+app.use('/public', express.static(__dirname + '/public/uploads/'));
 
 //Connect mongodb
 dbConnection();

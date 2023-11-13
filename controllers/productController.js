@@ -71,12 +71,14 @@ export const addProduct = async (req, res) => {
             .status(400)
             .json({ success: false, message: 'Invalid category' });
     }
+
+    const fileName = req.file.filename;
     try {
         const newProduct = new Product({
             name: req.body.name,
             description: req.body.description,
             richDescription: req.body.richDescription,
-            image: req.body.image,
+            image: fileName,
             images: req.body.images,
             brand: req.body.brand,
             price: req.body.price,
