@@ -18,7 +18,16 @@ const storage = multer.diskStorage({
         cb(uploadError, './public/uploads/products');
     },
     filename: (req, file, cb) => {
-        const fileName = Date.now() + file.originalname.replace(' ', '-');
+        const currentDate = new Date();
+        const day = currentDate.getDate();
+        const month = currentDate.getMonth() + 1; // Note: Months are zero-based, so January is 0, February is 1, etc.
+        const year = currentDate.getFullYear();
+
+        const fileName = `${day}-${month}-${year}-${file.originalname.replace(
+            ' ',
+            '-'
+        )}`;
+
         cb(null, fileName);
     },
 });

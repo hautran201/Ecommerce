@@ -8,6 +8,7 @@ import {
     deleteProduct,
     getCountProduct,
     getFeaturedProduct,
+    updateGalleryProduct,
 } from '../controllers/productController.js';
 import uploadFile from '../services/uploadFile.js';
 
@@ -29,6 +30,11 @@ router.get('/', getAllProducts);
 router.post('/', uploadFile.single('image'), addProduct);
 
 //Update product
+router.put(
+    '/gallery-images/:productId',
+    uploadFile.array('images', 10),
+    updateGalleryProduct
+);
 router.patch('/:productId', updateProduct);
 
 //Delete product

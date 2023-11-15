@@ -1,4 +1,3 @@
-import { populate } from 'dotenv';
 import Category from '../models/categoryModel.js';
 import Product from '../models/productModel.js';
 import mongoose from 'mongoose';
@@ -20,14 +19,9 @@ export const getAllProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
     try {
-        const id = req.params.productId;
-        if (!id) {
-            return res
-                .status(500)
-                .json({ success: false, message: 'Invallid productId' });
-        }
-
-        const product = await Product.findById(id).populate('category');
+        const product = await Product.findById(req.params.productId).populate(
+            'category'
+        );
 
         if (!product) {
             return res
@@ -37,7 +31,7 @@ export const getProduct = async (req, res) => {
 
         res.status(200).json(product);
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, error });
     }
 };
 
@@ -72,7 +66,15 @@ export const addProduct = async (req, res) => {
             .json({ success: false, message: 'Invalid category' });
     }
 
-    const fileName = req.file.filename;
+    const file = req.file;
+    console.log(file);
+    if (!file) {
+        return res
+            .status(400)
+            .json({ success: false, message: 'No image in the request' });
+    }
+    const fileName = file.filename;
+
     try {
         const newProduct = new Product({
             name: req.body.name,
@@ -130,6 +132,37 @@ export const updateProduct = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Product not found' });
+    }
+};
+
+export const updateGalleryProduct = async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.productId)) {
+        return res.status(404).json({ message: 'Invalid product ID' });
+    }
+    const files = req.files;
+    let imageList = [];
+
+    if (files) {
+        files.map((file) => {
+            imageList.push(file.filename);
+            console.log(file.filename);
+        });
+    }
+
+    console.log(imageList);
+    try {
+        const product = await Product.findByIdAndUpdate(
+            req.params.productId,
+            { images: imageList },
+            { new: true }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: 'Product updated successfully',
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
     }
 };
 
